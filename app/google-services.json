@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "668345036620",
+    "firebase_url": "https://carhireowner.firebaseio.com",
+    "project_id": "carhireowner",
+    "storage_bucket": "carhireowner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668345036620:android:205b09a03f723e2fb429e9",
+        "android_client_info": {
+          "package_name": "com.project.carhireowner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "668345036620-5de8eaviebondatdqo87curvt17ap3jb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.carhireowner",
+            "certificate_hash": "0509b9ae4c46644a4e2d27333c131a2ae7d061df"
+          }
+        },
+        {
+          "client_id": "668345036620-ge948kneakvfs60pbolbkef3o9f8ma9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJCXwAONzdDJjx0MkORfv-mQCNMV4wJSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668345036620-ge948kneakvfs60pbolbkef3o9f8ma9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
