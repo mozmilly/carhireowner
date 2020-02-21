@@ -82,9 +82,9 @@ public class ViewCarDetailsActivity extends AppCompatActivity implements EasyPer
         car = HomeFragment.getCar();
 
         number_plate.setText(("Number Plate "+car.getNumber_plate() ));
-        color.setText(("Color "+car.getColor() ));
+        color.setText((car.getColor()));
         seater.setText(("Seater "+car.getSeaters() ));
-        price.setText(("Price Per Day "+car.getPrice_per_day() ));
+        price.setText(String.valueOf(car.getPrice_per_day()));
         owner_phone.setText(("Owner Phone "+car.getOwner().getUser().getUsername() ));
 
         if (car.getPhoto()!=null){

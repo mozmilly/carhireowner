@@ -1,6 +1,7 @@
 package com.example.carhireowner.car.interfaces;
 
 import com.example.carhireowner.car.models.Car;
+import com.example.carhireowner.car.models.Make;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -48,4 +50,7 @@ public interface CarInterface {
             @Part MultipartBody.Part file,
             @Part("name") RequestBody name
     );
+
+    @GET("car/get_all_makes/")
+    Call<List<Make>> get_all_makes();
 }

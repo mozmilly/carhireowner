@@ -21,14 +21,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.carhireowner.MainActivity;
 import com.example.carhireowner.R;
 import com.example.carhireowner.car.interfaces.CarInterface;
+import com.example.carhireowner.car.models.Make;
 import com.example.carhireowner.utils.ApiUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -44,9 +47,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddCarActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
-    EditText make, numberPlate, color, seaters, price_per_day, location;
+    EditText numberPlate, color, seaters, price_per_day, location;
     ImageView imageView;
     Button upload, submit;
+
+    Spinner make;
 
     private static final String TAG = AddCarActivity.class.getSimpleName();
     private static final int REQUEST_GALLERY_CODE = 200;
@@ -68,6 +73,28 @@ public class AddCarActivity extends AppCompatActivity implements EasyPermissions
         upload = findViewById(R.id.upload);
         submit = findViewById(R.id.submit_car);
 
+
+        CarInterface carInterface = ApiUtils.getCarService();
+
+        carInterface.get_all_makes().enqueue(new Callback<List<Make>>() {
+            @Override
+            public void onResponse(Call<List<Make>> call, Response<List<Make>> response) {
+                if (response.code()==200){
+                    List<Make> carMakes = response.body();
+
+
+                    ArrayAdapter<Make> dataAdapter = new ArrayAdapter<>(AddCarActivity.this, android.R.layout.simple_spinner_item, carMakes);
+
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    make.setAdapter(dataAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Make>> call, Throwable t) {
+
+            }
+        });
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             upload.setEnabled(false);
@@ -129,7 +156,7 @@ public class AddCarActivity extends AppCompatActivity implements EasyPermissions
                 RequestBody mFile = RequestBody.create(MediaType.parse("image/*"), file);
                 MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", file.getName(), mFile);
                 RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), file.getName());
-                RequestBody make1 = RequestBody.create(MediaType.parse("text/plain"), make.getText().toString().trim());
+                RequestBody make1 = RequestBody.create(MediaType.parse("text/plain"), make.getSelectedItem().toString().trim());
                 RequestBody numberPlate1 = RequestBody.create(MediaType.parse("text/plain"), numberPlate.getText().toString().trim());
                 RequestBody color1 = RequestBody.create(MediaType.parse("text/plain"), color.getText().toString().trim());
                 RequestBody seaters1 = RequestBody.create(MediaType.parse("text/plain"), seaters.getText().toString().trim());

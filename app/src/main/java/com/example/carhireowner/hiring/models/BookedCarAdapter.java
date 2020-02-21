@@ -47,7 +47,10 @@ public class BookedCarAdapter extends  RecyclerView.Adapter<BookedCarAdapter.MyV
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.price.setText(("Price Per Day: "+bookedCarList.get(position).getCar().getPrice_per_day()));
+        holder.price.setText(("Total Price: "+
+                (bookedCarList.get(position).getCar().getPrice_per_day()
+                    *bookedCarList.get(position).getNo_of_days()
+                )));
         holder.number_plate.setText(("Number Plate: "+bookedCarList.get(position).getCar().getNumber_plate()));
         holder.status.setText(("Status: "+bookedCarList.get(position).getStatus()));
         holder.date.setText(("Date for hire: "+bookedCarList.get(position).getDate_for_hire()));

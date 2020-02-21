@@ -26,7 +26,7 @@ import retrofit2.Response;
 import static android.view.View.GONE;
 
 public class BookedCarDetails extends AppCompatActivity {
-    TextView make, number_plate, color, seater, price, user_phone, status, user_name;
+    TextView make, number_plate, color, seater, price, user_phone, status, user_name, no_of_days;
     ImageView car_image, owner_image;
     BookedCar bookedCar;
     Button cancel, confirmPicked, confirmReturned;
@@ -48,16 +48,17 @@ public class BookedCarDetails extends AppCompatActivity {
         cancel = findViewById(R.id.cancel);
         confirmPicked = findViewById(R.id.confirm_picked);
         confirmReturned = findViewById(R.id.confirm_returned);
+        no_of_days = findViewById(R.id.no_of_days);
 
 
-        number_plate.setText(("Number Plate "+bookedCar.getCar().getNumber_plate() ));
-        color.setText(("Color "+bookedCar.getCar().getColor() ));
-        seater.setText(("Seater "+bookedCar.getCar().getSeaters()));
-        price.setText(("Price Per Day "+bookedCar.getCar().getPrice_per_day()));
-        user_phone.setText(("Client Phone "+bookedCar.getUser().getUsername() ));
-        status.setText(("Status "+bookedCar.getStatus() ));
-        user_name.setText(("Client Name "+bookedCar.getUser().getFirst_name()+" "+bookedCar.getUser().getLast_name() ));
-
+        number_plate.setText(("Number Plate: "+bookedCar.getCar().getNumber_plate() ));
+        color.setText(("Color: "+bookedCar.getCar().getColor() ));
+        seater.setText(("Seater: "+bookedCar.getCar().getSeaters()));
+        price.setText(("Price total: "+(bookedCar.getCar().getPrice_per_day()*bookedCar.getNo_of_days())));
+        user_phone.setText(("Client Phone: "+bookedCar.getUser().getUsername() ));
+        status.setText(("Status: "+bookedCar.getStatus() ));
+        user_name.setText(("Client Name: "+bookedCar.getUser().getFirst_name()+" "+bookedCar.getUser().getLast_name() ));
+        no_of_days.setText(("No of Days: "+bookedCar.getNo_of_days()));
         if (bookedCar.getCar().getPhoto()!=null){
             if (URLUtil.isValidUrl("https://carhiremodule.pythonanywhere.com"+bookedCar.getCar().getPhoto())){
                 Picasso.with(BookedCarDetails.this)
