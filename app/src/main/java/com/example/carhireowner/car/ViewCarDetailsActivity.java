@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,12 +36,15 @@ import com.example.carhireowner.MainActivity;
 import com.example.carhireowner.R;
 import com.example.carhireowner.car.interfaces.CarInterface;
 import com.example.carhireowner.car.models.Car;
+import com.example.carhireowner.car.models.CarReview;
+import com.example.carhireowner.car.models.CarReviewAdapter;
 import com.example.carhireowner.ui.home.HomeFragment;
 import com.example.carhireowner.utils.ApiUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -49,6 +54,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.example.carhireowner.utils.PaginationListener.PAGE_START;
 
 public class ViewCarDetailsActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
     Car car;
@@ -64,6 +71,16 @@ public class ViewCarDetailsActivity extends AppCompatActivity implements EasyPer
     private static final int READ_REQUEST_CODE = 300;
     private Uri uri;
     File file ;
+
+
+    private int currentPage = PAGE_START;
+    private boolean isLastPage = false;
+    private int totalPage = 10;
+    private boolean isLoading = false;
+    int itemCount = 0;
+
+    CarReviewAdapter carReviewAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -286,5 +303,48 @@ public class ViewCarDetailsActivity extends AppCompatActivity implements EasyPer
             startActivityForResult(intent, 1);
         }
 
+    }
+
+    private void doApiCall(View root) {
+        final List<CarReview> items = new ArrayList<>();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ProgressBar progressBar = root.findViewById(R.id.my_progress_bar);
+                progressBar.setVisibility(View.VISIBLE);
+                CarInterface carInterface = ApiUtils.getCarService();
+                carInterface.get_car_reviews(car.getId(), currentPage).enqueue(new Callback<List<CarReview>>() {
+                    @Override
+                    public void onResponse(Call<List<CarReview>> call, Response<List<CarReview>> response) {
+                        if (response.code()==200){
+                            items.addAll(response.body());
+
+                            /**
+                             * manage progress view
+                             */
+                            if (currentPage != PAGE_START) carReviewAdapter.removeLoading();
+                            carReviewAdapter.addItems(items);
+
+                            // check weather is last page or not
+                            if (response.body().size()==30){
+                                carReviewAdapter.addLoading();
+                            } else {
+                                isLastPage = true;
+                            }
+                            isLoading = false;
+                            progressBar.setVisibility(View.GONE);
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CarReview>> call, Throwable t) {
+
+                    }
+                });
+
+
+            }
+        }, 1500);
     }
 }

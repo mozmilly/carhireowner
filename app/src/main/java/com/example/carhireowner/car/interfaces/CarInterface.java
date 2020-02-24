@@ -1,6 +1,7 @@
 package com.example.carhireowner.car.interfaces;
 
 import com.example.carhireowner.car.models.Car;
+import com.example.carhireowner.car.models.CarReview;
 import com.example.carhireowner.car.models.Make;
 
 import java.util.List;
@@ -53,4 +54,13 @@ public interface CarInterface {
 
     @GET("car/get_all_makes/")
     Call<List<Make>> get_all_makes();
+
+
+    @FormUrlEncoded
+    @POST("car/get_car_reviews/")
+    Call<List<CarReview>> get_car_reviews(
+            @Field("car_id") int car_id,
+            @Field("page") int page
+    );
+
 }
